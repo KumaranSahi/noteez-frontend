@@ -5,13 +5,19 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import theme from "./utils/theme";
+import { BrowserRouter } from "react-router-dom";
+import { AuthContextProvider } from "./store";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ChakraProvider>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <App />
-    </ChakraProvider>
+    <BrowserRouter>
+      <ChakraProvider>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+        <AuthContextProvider>
+          <App />
+        </AuthContextProvider>
+      </ChakraProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );

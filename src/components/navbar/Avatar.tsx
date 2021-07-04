@@ -1,5 +1,4 @@
 import {
-  Text,
   Avatar,
   WrapItem,
   Menu,
