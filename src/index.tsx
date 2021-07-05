@@ -1,21 +1,28 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import theme from "./utils/theme";
 import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from "./store";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "./apolloUtils";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <ChakraProvider>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        <AuthContextProvider>
-          <App />
-        </AuthContextProvider>
+        <ApolloProvider client={client}>
+          <AuthContextProvider>
+            <App />
+            <ToastContainer />
+          </AuthContextProvider>
+        </ApolloProvider>
       </ChakraProvider>
     </BrowserRouter>
   </React.StrictMode>,

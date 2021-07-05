@@ -1,29 +1,34 @@
 import {
   AuthAction,
-  UserData,
+  SignedUpInfo,
   SigninPages,
   ChangePassword,
   SigninUser,
   // SignedInUserInfo,
 } from "./auth.types";
 import { Dispatch, SetStateAction } from "react";
-// import { ResponseTemplate } from "../../Generics.types";
-// import axios from "axios";
-// import { APP_URL, setupAuthHeaderForServiceCalls } from "../../axiosUtils";
-import { 
-  // successToast,
-   warningToast, 
-  //  infoToast 
-  } from "../../components";
+import { successToast, warningToast, infoToast } from "../../components";
 
 export const signUpUser = async (
-  userData: UserData,
-  setLoading: Dispatch<SetStateAction<boolean>>,
+  signedUpInfo: SignedUpInfo,
   setCurrentPage: Dispatch<SetStateAction<SigninPages>>
 ) => {
-  setLoading(true);
-  try {
-  } catch (error: any) {}
+  if (signedUpInfo.ok) {
+    successToast("User signed up successfully!");
+    setCurrentPage("SIGNIN_PAGE");
+  } else {
+    switch (signedUpInfo.message) {
+      case "INVALID_INPUT":
+        warningToast("Check your details and try again");
+        break;
+      case "USER_EXISTS":
+        infoToast("User already exists please try signing in");
+        break;
+      default:
+        infoToast("Internal server error please try again later");
+        break;
+    }
+  }
 };
 
 export const checkAuthTimeout = (

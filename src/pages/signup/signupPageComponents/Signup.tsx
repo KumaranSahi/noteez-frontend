@@ -12,18 +12,46 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { emailValidation, nameValidation, passwordValidation } from "./utils";
+import { useMutation } from "@apollo/client";
+import { SIGN_UP } from "../../../graphql/auth";
+import { useAuth } from "../../../store";
 
 export const SignupContainer = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [signUpUserMutation] = useMutation(SIGN_UP);
+
+  const { signUpUser, setCurrentPage } = useAuth();
+
   return (
     <Formik
       initialValues={{ name: "", email: "", password: "" }}
       onSubmit={(values, actions) => {
-        console.log(values);
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
+        try {
+          actions.setSubmitting(true);
+          signUpUserMutation({
+            variables: {
+              name: values.name,
+              email: values.email,
+              password: values.password,
+            },
+            update: (_, data) => {
+              if (data) {
+                const userData = data.data!.signupUser;
+                signUpUser(
+                  {
+                    message: userData.message,
+                    ok: userData.ok,
+                  },
+                  setCurrentPage
+                );
+                actions.setSubmitting(false);
+              }
+            },
+          });
+        } catch (error) {
+          console.log(error);
           actions.setSubmitting(false);
-        }, 1000);
+        }
       }}
     >
       {(props) => (
@@ -85,7 +113,7 @@ export const SignupContainer = () => {
           <Button
             mt={4}
             colorScheme="teal"
-            // isLoading={props.isSubmitting}
+            isLoading={props.isSubmitting}
             type="submit"
           >
             Submit

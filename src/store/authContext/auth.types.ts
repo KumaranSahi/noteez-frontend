@@ -8,8 +8,7 @@ export type AuthContextType = {
   token: string;
   userName: string;
   signUpUser: (
-    userData: UserData,
-    setLoading: Dispatch<SetStateAction<boolean>>,
+    signedUpInfo: SignedUpInfo,
     setCurrentPage: Dispatch<SetStateAction<SigninPages>>
   ) => void;
   signInUser: (
@@ -44,10 +43,9 @@ export type AuthAction =
 
 export type SigninPages = "SIGNIN_PAGE" | "SIGNUP_PAGE" | "CHANGE_PASSWORD";
 
-export type UserData = {
-  name: string;
-  email: string;
-  password: string;
+export type SignedUpInfo = {
+  ok: boolean;
+  message: string;
 };
 
 export type SigninUser = {

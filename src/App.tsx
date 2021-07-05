@@ -25,7 +25,7 @@ function App() {
       <Navbar />
       <Switch>
         <LockSignup path="/sign-up" component={Signup} />
-        <Route path="/" component={Home} />
+        <PrivateLink path="/" component={Home} />
       </Switch>
     </VStack>
   );
