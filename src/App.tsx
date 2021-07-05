@@ -1,7 +1,7 @@
 import { Navbar } from "./components";
 import "./App.css";
 import { VStack } from "@chakra-ui/react";
-import { Signup } from "./pages";
+import { Signup, Home } from "./pages";
 import { Switch, Route, useHistory, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -21,10 +21,11 @@ function App() {
   };
 
   return (
-    <VStack h="100%">
+    <VStack height="100%" width="100%">
       <Navbar />
       <Switch>
         <LockSignup path="/sign-up" component={Signup} />
+        <Route path="/" component={Home} />
       </Switch>
     </VStack>
   );
