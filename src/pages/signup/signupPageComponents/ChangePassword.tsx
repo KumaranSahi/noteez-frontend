@@ -12,19 +12,45 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { emailValidation, passwordValidation } from "./utils";
+import { useMutation } from "@apollo/client";
+import { CHANGE_PASSWORD } from "../../../graphql/auth";
+import { useAuth } from "../../../store";
 
 export const ConfirmPasswordContainer = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [changePasswordMutation] = useMutation(CHANGE_PASSWORD);
+  const { changePassword, setCurrentPage } = useAuth();
   return (
     <Formik
       initialValues={{ email: "", password: "", confirmPassword: "" }}
       onSubmit={(values, actions) => {
-        console.log(values);
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
+        try {
+          actions.setSubmitting(true);
+          changePasswordMutation({
+            variables: {
+              email: values.email,
+              password: values.password,
+              confirmPassword: values.confirmPassword,
+            },
+            update: (_, data) => {
+              if (data) {
+                const userData = data.data!.changePassword;
+                changePassword(
+                  {
+                    message: userData.message,
+                    ok: userData.ok,
+                  },
+                  setCurrentPage
+                );
+                actions.setSubmitting(false);
+              }
+            },
+          });
+        } catch (error) {
+          console.log(error);
           actions.setSubmitting(false);
-        }, 1000);
+        }
       }}
     >
       {(props) => (
@@ -109,7 +135,7 @@ export const ConfirmPasswordContainer = () => {
           <Button
             mt={4}
             colorScheme="teal"
-            // isLoading={props.isSubmitting}
+            isLoading={props.isSubmitting}
             type="submit"
           >
             Submit

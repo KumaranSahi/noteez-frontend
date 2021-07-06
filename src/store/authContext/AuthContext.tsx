@@ -6,12 +6,7 @@ import {
   useState,
   useEffect,
 } from "react";
-import {
-  Props,
-  State,
-  SigninPages,
-  AuthContextType,
-} from "./auth.types";
+import { Props, State, SigninPages, AuthContextType } from "./auth.types";
 import {
   signUpUser,
   signOutUser,
@@ -32,7 +27,6 @@ export const initialState: State = {
 };
 
 export const AuthContextProvider: FC = ({ children }: Props) => {
-  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState<SigninPages>("SIGNIN_PAGE");
 
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -52,8 +46,6 @@ export const AuthContextProvider: FC = ({ children }: Props) => {
         currentPage: currentPage,
         changePassword: changePassword,
         setCurrentPage: setCurrentPage,
-        authLoading: loading,
-        setAuthLoading: setLoading,
         dispatch: dispatch,
       }}
     >

@@ -15,17 +15,13 @@ export type AuthContextType = {
     dispatch: Dispatch<AuthAction>,
     signedInuserInfo: SignedInUserInfo
   ) => void;
-  signOutUser: (
-    dispatch: Dispatch<AuthAction>,
-  ) => void;
+  signOutUser: (dispatch: Dispatch<AuthAction>) => void;
   currentPage: SigninPages;
   changePassword: (
-    userData: ChangePassword,
-    setLoading: Dispatch<SetStateAction<boolean>>
+    changePasswordInfo: ChangePasswordInfo,
+    setCurrentPage: Dispatch<SetStateAction<SigninPages>>
   ) => void;
   setCurrentPage: Dispatch<SetStateAction<SigninPages>>;
-  authLoading: boolean;
-  setAuthLoading: Dispatch<SetStateAction<boolean>>;
   dispatch: Dispatch<AuthAction>;
 };
 
@@ -51,10 +47,9 @@ export type SigninUser = {
   password: string;
 };
 
-export type ChangePassword = {
-  email: string;
-  password: string;
-  confirmPassword: string;
+export type ChangePasswordInfo = {
+  ok: boolean;
+  message: string;
 };
 
 export type SignedInUserInfo = {

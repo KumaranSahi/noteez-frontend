@@ -19,3 +19,20 @@ export const SIGN_IN = gql`
     }
   }
 `;
+
+export const CHANGE_PASSWORD = gql`
+  mutation ChangePassword(
+    $email: String
+    $password: String
+    $confirmPassword: String
+  ) {
+    changePassword(
+      email: $email
+      password: $password
+      confirmPassword: $confirmPassword
+    ) {
+      ok
+      message
+    }
+  }
+`;

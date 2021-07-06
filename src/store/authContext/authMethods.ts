@@ -2,7 +2,7 @@ import {
   AuthAction,
   SignedUpInfo,
   SigninPages,
-  ChangePassword,
+  ChangePasswordInfo,
   SignedInUserInfo,
 } from "./auth.types";
 import { Dispatch, SetStateAction } from "react";
@@ -47,16 +47,21 @@ export const signOutUser = (dispatch: Dispatch<AuthAction>) => {
 };
 
 export const changePassword = async (
-  userData: ChangePassword,
-  setLoading: Dispatch<SetStateAction<boolean>>,
+  changePasswordInfo: ChangePasswordInfo,
   setCurrentPage: Dispatch<SetStateAction<SigninPages>>
 ) => {
-  setLoading(true);
-  try {
-  } catch (error) {
-    warningToast("Unable to change password please try again later");
-    console.log(error);
-    setLoading(false);
+  if (changePasswordInfo.ok) {
+    successToast("Password changed successfully!");
+    setCurrentPage("SIGNIN_PAGE");
+  } else {
+    switch (changePasswordInfo.message) {
+      case "INVALID_INPUT":
+        warningToast("Invalid email/password");
+        break;
+      default:
+        infoToast("Internal server error please try again later");
+        break;
+    }
   }
 };
 

@@ -15,20 +15,22 @@ import { emailValidation } from "./utils";
 import { SIGN_IN } from "../../../graphql/auth";
 import { useLazyQuery } from "@apollo/client";
 import { useAuth } from "../../../store";
+import { useHistory } from "react-router-dom";
 
 export const SigninContainer = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { signInUser, dispatch: authDispatch } = useAuth();
+  const { push } = useHistory();
   const [signinQuery, { loading }] = useLazyQuery(SIGN_IN, {
     onCompleted: (data) => {
       const signedInUserData = data.signinUser;
-      console.log(signedInUserData);
       signInUser(authDispatch, {
         message: signedInUserData.message,
         ok: signedInUserData.ok,
         token: signedInUserData.token,
         userName: signedInUserData.name,
       });
+      push("/");
     },
   });
   return (
