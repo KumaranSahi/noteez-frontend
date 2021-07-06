@@ -24,10 +24,10 @@ export const NoteEditor = ({ isOpen, onClose }: NoteEditorProps) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <Input placeholder="Basic usage" />
+            <Input placeholder="Title" />
           </ModalHeader>
           <ModalBody>
-            <Textarea placeholder="Here is a sample placeholder" />
+            <Textarea placeholder="Write your note here!" />
           </ModalBody>
         </ModalContent>
       </Modal>

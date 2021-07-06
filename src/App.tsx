@@ -4,6 +4,7 @@ import { VStack } from "@chakra-ui/react";
 import { Signup, Home } from "./pages";
 import { Switch, Route, useHistory, Redirect } from "react-router-dom";
 import { useEffect } from "react";
+import { NoteContextProvider } from "./store";
 
 function App() {
   const PrivateLink = ({ ...props }) => {
@@ -23,10 +24,12 @@ function App() {
   return (
     <VStack height="100%" width="100%">
       <Navbar />
-      <Switch>
-        <LockSignup path="/sign-up" component={Signup} />
-        <PrivateLink path="/" component={Home} />
-      </Switch>
+      <NoteContextProvider>
+        <Switch>
+          <LockSignup path="/sign-up" component={Signup} />
+          <PrivateLink path="/" component={Home} />
+        </Switch>
+      </NoteContextProvider>
     </VStack>
   );
 }

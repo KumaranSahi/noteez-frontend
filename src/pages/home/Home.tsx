@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { Container, Box, Badge } from "@chakra-ui/react";
+import { Box, VStack } from "@chakra-ui/react";
 import { NoteEditor } from "./NoteEditor";
+import { AddNotes } from "./AddNotes";
 import Masonry from "react-masonry-css";
+import { Note } from "./Note";
+import { useNote } from "../../store";
 
 export const Home = () => {
   const [open, setOpen] = useState(false);
+  const { notes } = useNote();
 
   const breakpointColumnsObj = {
     default: 4,
@@ -14,46 +18,20 @@ export const Home = () => {
   };
 
   return (
-    <>
-      <Box width="100%" height="100%">
+    <VStack>
+      <AddNotes />
+      <Box width="100vw" height="100%">
         <Masonry
           breakpointCols={breakpointColumnsObj}
           className="my-masonry-grid"
           columnClassName="my-masonry-grid_column"
         >
-          <Box
-            boxShadow="dark-lg"
-            padding="4"
-            borderRadius="2xl"
-            onClick={() => setOpen(true)}
-            margin="1"
-          >
-            <Badge fontSize="larger">Note Title</Badge>
-            <Container fontSize="larger">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, ab
-              harum. Ex et, praesentium facilis voluptatum natus similique
-              suscipit ratione voluptates molestiae incidunt blanditiis. Ea
-              corrupti ipsam consectetur molestias enim.
-            </Container>
-          </Box>
-          <Box
-            boxShadow="dark-lg"
-            padding="4"
-            borderRadius="2xl"
-            onClick={() => setOpen(true)}
-            margin="1"
-          >
-            <Badge fontSize="larger">Note Title</Badge>
-            <Container fontSize="larger">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, ab
-              harum. Ex et, praesentium facilis voluptatum natus similique
-              suscipit ratione voluptates molestiae incidunt blanditiis. Ea
-              corrupti ipsam consectetur molestias enim.
-            </Container>
-          </Box>
+          {notes.map(({ content, title, id }) => (
+            <Note key={id} content={content} id={id} title={title} />
+          ))}
         </Masonry>
       </Box>
       <NoteEditor isOpen={open} onClose={() => setOpen(false)} />
-    </>
+    </VStack>
   );
 };
