@@ -3,8 +3,7 @@ import {
   SignedUpInfo,
   SigninPages,
   ChangePassword,
-  SigninUser,
-  // SignedInUserInfo,
+  SignedInUserInfo,
 } from "./auth.types";
 import { Dispatch, SetStateAction } from "react";
 import { successToast, warningToast, infoToast } from "../../components";
@@ -33,24 +32,18 @@ export const signUpUser = async (
 
 export const checkAuthTimeout = (
   expirationTime: number,
-  dispatch: Dispatch<AuthAction>,
-  setLoading: Dispatch<SetStateAction<boolean>>
+  dispatch: Dispatch<AuthAction>
 ) => {
   setTimeout(() => {
-    signOutUser(dispatch, setLoading);
-  }, expirationTime * (24 * 1000));
+    signOutUser(dispatch);
+  }, expirationTime * 1000);
 };
 
-export const signOutUser = (
-  dispatch: Dispatch<AuthAction>,
-  setLoading: Dispatch<SetStateAction<boolean>>
-) => {
+export const signOutUser = (dispatch: Dispatch<AuthAction>) => {
   localStorage.clear();
-  // setupAuthHeaderForServiceCalls(null);
   dispatch({
     type: "SIGNOUT_USER",
   });
-  setLoading(false);
 };
 
 export const changePassword = async (
@@ -67,24 +60,19 @@ export const changePassword = async (
   }
 };
 
-export const onReload = (
-  dispatch: Dispatch<AuthAction>,
-  setLoading: Dispatch<SetStateAction<boolean>>
-) => {
+export const onReload = (dispatch: Dispatch<AuthAction>) => {
   const token = localStorage.getItem("token");
   let date = localStorage.getItem("expiresIn");
   let expiresIn: Date = new Date();
   if (date) expiresIn = new Date(date);
   if (expiresIn <= new Date()) {
-    signOutUser(dispatch, setLoading);
+    signOutUser(dispatch);
   } else {
     const userName = localStorage.getItem("userName");
     checkAuthTimeout(
-      (expiresIn.getTime() - new Date().getTime()) / 1000,
-      dispatch,
-      setLoading
+      ((expiresIn.getTime() - new Date().getTime()) / 1000) * 24,
+      dispatch
     );
-    // setupAuthHeaderForServiceCalls(token!);
     dispatch({
       type: "SIGNIN_USER",
       payload: {
@@ -97,16 +85,32 @@ export const onReload = (
 };
 
 export const signInUser = async (
-  emailAndPassword: SigninUser,
   dispatch: Dispatch<AuthAction>,
-  setLoading: Dispatch<SetStateAction<boolean>>
+  signedInuserInfo: SignedInUserInfo
 ) => {
-  setLoading(true);
-  try {
-    setLoading(false);
-  } catch (error) {
-    warningToast("Invalid username or password");
-    console.log(error);
-    setLoading(false);
+  if (signedInuserInfo.ok) {
+    successToast("User signed up successfully!");
+    localStorage.setItem("token", signedInuserInfo.token);
+    localStorage.setItem("userName", signedInuserInfo.userName);
+    const expiresIn = new Date(new Date().getTime() + 24 * 3600000);
+    localStorage.setItem("expiresIn", "" + expiresIn);
+    checkAuthTimeout(24 * 3600, dispatch);
+    dispatch({
+      type: "SIGNIN_USER",
+      payload: {
+        token: signedInuserInfo.token,
+        userName: signedInuserInfo.userName,
+        expiresIn: new Date(expiresIn),
+      },
+    });
+  } else {
+    switch (signedInuserInfo.message) {
+      case "INVALID_USERNAME_PASSWORD":
+        warningToast("Invalid email/password");
+        break;
+      default:
+        infoToast("Internal server error please try again later");
+        break;
+    }
   }
 };

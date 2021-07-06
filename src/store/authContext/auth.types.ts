@@ -12,13 +12,11 @@ export type AuthContextType = {
     setCurrentPage: Dispatch<SetStateAction<SigninPages>>
   ) => void;
   signInUser: (
-    emailAndPassword: SigninUser,
     dispatch: Dispatch<AuthAction>,
-    setLoading: Dispatch<SetStateAction<boolean>>
+    signedInuserInfo: SignedInUserInfo
   ) => void;
   signOutUser: (
     dispatch: Dispatch<AuthAction>,
-    setLoading: Dispatch<SetStateAction<boolean>>
   ) => void;
   currentPage: SigninPages;
   changePassword: (
@@ -62,5 +60,6 @@ export type ChangePassword = {
 export type SignedInUserInfo = {
   token: string;
   userName: string;
-  expiresIn: Date;
+  ok: boolean;
+  message: string;
 };

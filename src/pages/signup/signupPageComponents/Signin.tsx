@@ -12,18 +12,42 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { emailValidation } from "./utils";
+import { SIGN_IN } from "../../../graphql/auth";
+import { useLazyQuery } from "@apollo/client";
+import { useAuth } from "../../../store";
 
 export const SigninContainer = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { signInUser, dispatch: authDispatch } = useAuth();
+  const [signinQuery, { loading }] = useLazyQuery(SIGN_IN, {
+    onCompleted: (data) => {
+      const signedInUserData = data.signinUser;
+      console.log(signedInUserData);
+      signInUser(authDispatch, {
+        message: signedInUserData.message,
+        ok: signedInUserData.ok,
+        token: signedInUserData.token,
+        userName: signedInUserData.name,
+      });
+    },
+  });
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
       onSubmit={(values, actions) => {
-        console.log(values);
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
+        try {
+          actions.setSubmitting(true);
+          signinQuery({
+            variables: {
+              email: values.email,
+              password: values.password,
+            },
+          });
+          if (!loading) actions.setSubmitting(false);
+        } catch (error) {
+          console.log(error);
           actions.setSubmitting(false);
-        }, 1000);
+        }
       }}
     >
       {(props) => (
@@ -74,7 +98,7 @@ export const SigninContainer = () => {
           <Button
             mt={4}
             colorScheme="teal"
-            // isLoading={props.isSubmitting}
+            isLoading={props.isSubmitting}
             type="submit"
           >
             Submit

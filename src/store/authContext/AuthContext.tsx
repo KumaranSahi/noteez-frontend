@@ -38,7 +38,7 @@ export const AuthContextProvider: FC = ({ children }: Props) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   useEffect(() => {
-    onReload(dispatch, setLoading);
+    onReload(dispatch);
   }, []);
 
   return (

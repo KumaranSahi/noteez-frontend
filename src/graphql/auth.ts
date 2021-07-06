@@ -8,3 +8,14 @@ export const SIGN_UP = gql`
     }
   }
 `;
+
+export const SIGN_IN = gql`
+  query SigninUser($email: String, $password: String) {
+    signinUser(email: $email, password: $password) {
+      ok
+      message
+      token
+      name
+    }
+  }
+`;
