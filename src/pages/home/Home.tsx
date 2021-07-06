@@ -20,7 +20,7 @@ export const Home = () => {
   return (
     <VStack>
       <AddNotes />
-      <Box width="100vw" height="100%">
+      <Box width="95vw" height="100%">
         <Masonry
           breakpointCols={breakpointColumnsObj}
           className="my-masonry-grid"

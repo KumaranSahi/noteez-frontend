@@ -11,3 +11,17 @@ export const CREATE_NOTE = gql`
     }
   }
 `;
+
+export const FETCH_NOTES = gql`
+  query {
+    fetchNotes {
+      ok
+      message
+      notes {
+        id
+        content
+        title
+      }
+    }
+  }
+`;

@@ -10,6 +10,12 @@ export type Note = {
   content: string;
 };
 
+export type NoteListInfo = {
+  ok: boolean;
+  message: string;
+  notes: Note[];
+};
+
 export type NewNoteInfo = {
   id: string;
   content: string;
