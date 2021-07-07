@@ -5,10 +5,11 @@ import { AddNotes } from "./AddNotes";
 import Masonry from "react-masonry-css";
 import { Note } from "./Note";
 import { useNote } from "../../store";
+import { Spinner } from "../../components";
 
 export const Home = () => {
   const [selectedNote, setSelectedNote] = useState("");
-  const { notes } = useNote();
+  const { notes, noteLoading } = useNote();
 
   const breakpointColumnsObj = {
     default: 4,
@@ -42,6 +43,7 @@ export const Home = () => {
         onClose={() => setSelectedNote("")}
         noteId={selectedNote}
       />
+      {noteLoading && <Spinner />}
     </VStack>
   );
 };

@@ -24,6 +24,12 @@ export type NewNoteInfo = {
   message: string;
 };
 
+export type DeleteNoteInfo = {
+  id: string;
+  ok: boolean;
+  message: string;
+};
+
 export type NoteAction =
   | { type: "ADD_NEW_NOTE"; payload: Note }
   | { type: "ADD_NOTE_LIST"; payload: Note[] }
@@ -42,7 +48,13 @@ export type NoteContextType = {
     noteDispatch: Dispatch<NoteAction>,
     push: any
   ) => void;
+  deleteNote: (
+    deleteNoteInfo: DeleteNoteInfo,
+    noteDispatch: Dispatch<NoteAction>,
+    push: any
+  ) => void;
   noteDispatch: Dispatch<NoteAction>;
+  noteLoading: boolean;
 };
 
 export type NoteState = {

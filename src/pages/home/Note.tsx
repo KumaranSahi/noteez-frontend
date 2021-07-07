@@ -1,4 +1,4 @@
-import { Box, Badge, Container } from "@chakra-ui/react";
+import { Box, Heading, Container } from "@chakra-ui/react";
 
 export type NoteType = {
   title: string;
@@ -17,7 +17,9 @@ export const Note = ({ content, id, title, selectNote }: NoteType) => {
       onClick={() => selectNote(id)}
       cursor="pointer"
     >
-      <Badge fontSize="larger">{title}</Badge>
+      <Heading fontSize="larger" color="teal" margin="4">
+        {title}
+      </Heading>
       <Container fontSize="larger">{content}</Container>
     </Box>
   );

@@ -1,7 +1,7 @@
 import { useContext, createContext, useReducer, FC, useEffect } from "react";
 import { NoteContextType, NoteState, Props } from "./note.types";
 import { noteReducer } from "./noteReducer/noteReducer";
-import { addNewNote, loadNotes, editNote } from "./noteMethods";
+import { addNewNote, loadNotes, editNote, deleteNote } from "./noteMethods";
 import { useQuery } from "@apollo/client";
 import { FETCH_NOTES } from "../../graphql/note";
 import { useHistory } from "react-router-dom";
@@ -16,7 +16,7 @@ export const initialState: NoteState = {
 
 export const NoteContextProvider: FC = ({ children }: Props) => {
   const [state, dispatch] = useReducer(noteReducer, initialState);
-  const { data } = useQuery(FETCH_NOTES);
+  const { data, loading } = useQuery(FETCH_NOTES);
   const { push } = useHistory();
 
   useEffect(() => {
@@ -29,7 +29,9 @@ export const NoteContextProvider: FC = ({ children }: Props) => {
         ...state,
         addNewNote: addNewNote,
         editNote: editNote,
+        deleteNote: deleteNote,
         noteDispatch: dispatch,
+        noteLoading: loading,
       }}
     >
       {children}

@@ -15,7 +15,7 @@ import {
 import { Formik, Form, Field, FieldProps } from "formik";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { EDIT_NOTES } from "../../graphql/note";
+import { EDIT_NOTES, DELETE_NOTES } from "../../graphql/note";
 import { useNote } from "../../store";
 
 export type NoteEditorProps = {
@@ -25,13 +25,14 @@ export type NoteEditorProps = {
 };
 
 export const NoteEditor = ({ isOpen, onClose, noteId }: NoteEditorProps) => {
-  const { notes, editNote, noteDispatch } = useNote();
+  const { notes, editNote, noteDispatch, deleteNote } = useNote();
   const noteToEdit = {
     title: "",
     content: "",
   };
   const { push } = useHistory();
   const [editNoteMutation] = useMutation(EDIT_NOTES);
+  const [deleteNoteMutation] = useMutation(DELETE_NOTES);
   /* eslint-disable */
   useEffect(() => {
     let note = notes.find(({ id }) => id === noteId);
@@ -40,6 +41,25 @@ export const NoteEditor = ({ isOpen, onClose, noteId }: NoteEditorProps) => {
       noteToEdit.title = note.title;
     }
   }, [notes, noteId]);
+
+  const deleteNoteClicked = () => {
+    try {
+      deleteNoteMutation({
+        variables: {
+          noteId: noteId,
+        },
+        update: (_, data) => {
+          const noteData = data.data!.deleteNote;
+          if (data) {
+            deleteNote(noteData, noteDispatch, push);
+          }
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    onClose();
+  };
 
   return (
     <>
@@ -71,7 +91,7 @@ export const NoteEditor = ({ isOpen, onClose, noteId }: NoteEditorProps) => {
                         noteDispatch,
                         push
                       );
-                      
+
                       actions.setSubmitting(false);
                     }
                   },
@@ -128,16 +148,15 @@ export const NoteEditor = ({ isOpen, onClose, noteId }: NoteEditorProps) => {
                     isLoading={props.isSubmitting}
                     type="submit"
                     colorScheme="teal"
-                    loadingText="Adding Note"
+                    loadingText="Editing Note"
                     margin="1"
                     variant="ghost"
                   >
-                    Add Note
+                    Edit Note
                   </Button>
                   <Button
-                    isLoading={props.isSubmitting}
+                    onClick={deleteNoteClicked}
                     colorScheme="red"
-                    loadingText="Deleting note"
                     margin="1"
                     variant="ghost"
                   >

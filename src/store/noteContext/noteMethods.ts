@@ -4,7 +4,12 @@ import {
   warningToast,
   // infoToast
 } from "../../components";
-import { NewNoteInfo, NoteAction, NoteListInfo } from "./note.types";
+import {
+  NewNoteInfo,
+  NoteAction,
+  NoteListInfo,
+  DeleteNoteInfo,
+} from "./note.types";
 
 export const loadNotes = (
   noteListInfo: NoteListInfo,
@@ -74,7 +79,29 @@ export const editNote = (
         push("/sign-up");
         break;
       default:
-        warningToast("Unable add note please try again later");
+        warningToast("Unable edit note please try again later");
+    }
+  }
+};
+
+export const deleteNote = (
+  deleteInfo: DeleteNoteInfo,
+  noteDispatch: Dispatch<NoteAction>,
+  push: any
+) => {
+  if (deleteInfo.ok) {
+    noteDispatch({
+      type: "DELETE_NOTE",
+      payload: deleteInfo.id,
+    });
+    successToast("Note deleted");
+  } else {
+    switch (deleteInfo.message) {
+      case "UNAUTHORIZED":
+        push("/sign-up");
+        break;
+      default:
+        warningToast("Unable delete note please try again later");
     }
   }
 };
