@@ -52,3 +52,29 @@ export const addNewNote = (
     }
   }
 };
+
+export const editNote = (
+  editNoteInfo: NewNoteInfo,
+  noteDispatch: Dispatch<NoteAction>,
+  push: any
+) => {
+  if (editNoteInfo.ok) {
+    noteDispatch({
+      type: "EDIT_NOTE",
+      payload: {
+        content: editNoteInfo.content,
+        id: editNoteInfo.id,
+        title: editNoteInfo.title,
+      },
+    });
+    successToast("Note editted");
+  } else {
+    switch (editNoteInfo.message) {
+      case "UNAUTHORIZED":
+        push("/sign-up");
+        break;
+      default:
+        warningToast("Unable add note please try again later");
+    }
+  }
+};

@@ -7,7 +7,7 @@ import { Note } from "./Note";
 import { useNote } from "../../store";
 
 export const Home = () => {
-  const [open, setOpen] = useState(false);
+  const [selectedNote, setSelectedNote] = useState("");
   const { notes } = useNote();
 
   const breakpointColumnsObj = {
@@ -27,11 +27,21 @@ export const Home = () => {
           columnClassName="my-masonry-grid_column"
         >
           {notes.map(({ content, title, id }) => (
-            <Note key={id} content={content} id={id} title={title} />
+            <Note
+              key={id}
+              content={content}
+              id={id}
+              title={title}
+              selectNote={(id: string) => setSelectedNote(id)}
+            />
           ))}
         </Masonry>
       </Box>
-      <NoteEditor isOpen={open} onClose={() => setOpen(false)} />
+      <NoteEditor
+        isOpen={selectedNote.length > 0}
+        onClose={() => setSelectedNote("")}
+        noteId={selectedNote}
+      />
     </VStack>
   );
 };

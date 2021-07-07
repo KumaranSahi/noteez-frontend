@@ -1,7 +1,7 @@
 import { useContext, createContext, useReducer, FC, useEffect } from "react";
 import { NoteContextType, NoteState, Props } from "./note.types";
 import { noteReducer } from "./noteReducer/noteReducer";
-import { addNewNote, loadNotes } from "./noteMethods";
+import { addNewNote, loadNotes, editNote } from "./noteMethods";
 import { useQuery } from "@apollo/client";
 import { FETCH_NOTES } from "../../graphql/note";
 import { useHistory } from "react-router-dom";
@@ -28,6 +28,7 @@ export const NoteContextProvider: FC = ({ children }: Props) => {
       value={{
         ...state,
         addNewNote: addNewNote,
+        editNote: editNote,
         noteDispatch: dispatch,
       }}
     >

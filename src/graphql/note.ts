@@ -25,3 +25,25 @@ export const FETCH_NOTES = gql`
     }
   }
 `;
+
+export const EDIT_NOTES = gql`
+  mutation EditNote($title: String, $content: String, $noteId: String) {
+    editNote(title: $title, content: $content, noteId: $noteId) {
+      id
+      content
+      title
+      ok
+      message
+    }
+  }
+`;
+
+export const DELETE_NOTES = gql`
+  mutation DeleteNote($noteId: String) {
+    deleteNote(noteId: $noteId) {
+      id
+      ok
+      message
+    }
+  }
+`;

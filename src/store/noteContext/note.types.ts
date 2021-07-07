@@ -26,12 +26,19 @@ export type NewNoteInfo = {
 
 export type NoteAction =
   | { type: "ADD_NEW_NOTE"; payload: Note }
-  | { type: "ADD_NOTE_LIST"; payload: Note[] };
+  | { type: "ADD_NOTE_LIST"; payload: Note[] }
+  | { type: "EDIT_NOTE"; payload: Note }
+  | { type: "DELETE_NOTE"; payload: string };
 
 export type NoteContextType = {
   notes: Note[];
   addNewNote: (
     newNoteInfo: NewNoteInfo,
+    noteDispatch: Dispatch<NoteAction>,
+    push: any
+  ) => void;
+  editNote: (
+    editNoteInfo: NewNoteInfo,
     noteDispatch: Dispatch<NoteAction>,
     push: any
   ) => void;
