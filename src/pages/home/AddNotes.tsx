@@ -48,6 +48,7 @@ export const AddNotes = () => {
                     push
                   );
                   actions.setSubmitting(false);
+                  actions.resetForm();
                 }
               },
             });
