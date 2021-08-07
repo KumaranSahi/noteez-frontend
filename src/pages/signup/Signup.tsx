@@ -58,6 +58,8 @@ export const Signup = () => {
           mt={4}
           colorScheme="teal"
           isLoading={loading}
+          variant="ghost"
+          width="100%"
           loadingText="Loging in as guest"
           onClick={() => guestSigninQuery()}
         >
