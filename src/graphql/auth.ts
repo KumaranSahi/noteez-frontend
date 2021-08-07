@@ -20,6 +20,17 @@ export const SIGN_IN = gql`
   }
 `;
 
+export const GUEST_SIGN_IN = gql`
+  query {
+    signinGuest {
+      ok
+      message
+      token
+      name
+    }
+  }
+`;
+
 export const CHANGE_PASSWORD = gql`
   mutation ChangePassword(
     $email: String

@@ -1,4 +1,4 @@
-import { Box, Text, Flex } from "@chakra-ui/react";
+import { Box, Text, Flex, Button } from "@chakra-ui/react";
 import { useAuth } from "../../store";
 import { SigninPages } from "../../store/authContext/auth.types";
 import {
@@ -6,9 +6,27 @@ import {
   SigninContainer,
   SignupContainer,
 } from "./signupPageComponents";
+import { GUEST_SIGN_IN } from "../../graphql/auth";
+import { useLazyQuery } from "@apollo/client";
+import { useHistory } from "react-router-dom";
 
 export const Signup = () => {
   const { currentPage, setCurrentPage } = useAuth();
+  const { signInUser, dispatch: authDispatch } = useAuth();
+  const { push } = useHistory();
+
+  const [guestSigninQuery, { loading }] = useLazyQuery(GUEST_SIGN_IN, {
+    onCompleted: (data) => {
+      const signedInUserData = data.signinGuest;
+      signInUser(authDispatch, {
+        message: signedInUserData.message,
+        ok: signedInUserData.ok,
+        token: signedInUserData.token,
+        userName: signedInUserData.name,
+      });
+      push("/");
+    },
+  });
 
   const pageToRender = (currentPage: SigninPages) => {
     switch (currentPage) {
@@ -36,6 +54,15 @@ export const Signup = () => {
     >
       {pageToRender(currentPage)}
       <Box>
+        <Button
+          mt={4}
+          colorScheme="teal"
+          isLoading={loading}
+          loadingText="Loging in as guest"
+          onClick={() => guestSigninQuery()}
+        >
+          Login as guest
+        </Button>
         {currentPage === "SIGNIN_PAGE" && (
           <Text
             onClick={() => setCurrentPage("CHANGE_PASSWORD")}
